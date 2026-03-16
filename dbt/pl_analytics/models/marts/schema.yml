@@ -51,3 +51,15 @@ models:
       - name: points_last_5
         tests:
           - not_null
+  - name: fct_team_season_stats
+    description: "Per team per season aggregated stats for home and away performance"
+    columns:
+      - name: team
+        tests:
+          - not_null
+      - name: season
+        tests:
+          - not_null
+      - name: total_points
+        tests:
+          - not_null
