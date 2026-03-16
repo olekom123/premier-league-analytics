@@ -1,0 +1,10 @@
+requests
+duckdb
+python-dotenv
+dbt-core
+dbt-duckdb
+streamlit
+pandas
+numpy
+sqlfluff
+sqlfluff-templater-dbt
