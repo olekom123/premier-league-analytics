@@ -63,3 +63,22 @@ models:
       - name: total_points
         tests:
           - not_null
+  - name: fct_prediction_results
+    description: "Joins Poisson model predictions with actual match results to enable accuracy evaluation"
+    columns:
+      - name: fixture_id
+        tests:
+          - not_null
+          - unique
+      - name: was_correct
+        tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: [0, 1]
+  - name: fct_model_performance
+    description: "Aggregated accuracy metrics for the Poisson prediction model, segmented by predicted and actual outcome"
+    columns:
+      - name: segment
+        tests:
+          - not_null

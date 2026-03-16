@@ -114,9 +114,8 @@ def predict_all_fixtures(con, fixtures, stats, league_home_avg, league_away_avg)
     return predictions
 
 def load_to_duckdb(con, predictions):
-    con.execute("DROP TABLE IF EXISTS raw_predictions")
     con.execute("""
-        CREATE TABLE raw_predictions (
+        CREATE TABLE IF NOT EXISTS raw_predictions (
             fixture_id          INTEGER,
             utc_date            VARCHAR,
             matchday            INTEGER,
@@ -132,14 +131,20 @@ def load_to_duckdb(con, predictions):
         )
     """)
 
-    for p in predictions:
+    existing_ids = set(
+        row[0] for row in con.execute("SELECT fixture_id FROM raw_predictions").fetchall()
+    )
+
+    new_predictions = [p for p in predictions if p['fixture_id'] not in existing_ids]
+
+    for p in new_predictions:
         con.execute("""
             INSERT INTO raw_predictions VALUES (
                 ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?
             )
         """, list(p.values()))
 
-    print(f"Stored {len(predictions)} predictions in raw_predictions")
+    print(f"Stored {len(new_predictions)} new predictions ({len(predictions) - len(new_predictions)} already existed)")
 
 if __name__ == "__main__":
     con = duckdb.connect(DB_PATH)
