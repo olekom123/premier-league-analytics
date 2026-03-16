@@ -19,22 +19,23 @@ A full end-to-end data engineering project analysing 21 seasons of Premier Leagu
 | macOS cron | Daily automated refresh |
 
 ## Project structure
-premier-league-analytics/
-├── ingestion/
-│   ├── fetch_historical.py   # 21 seasons of match data + odds
-│   ├── fetch_fixtures.py     # upcoming fixtures
-│   └── predict_match.py      # Poisson prediction model
-├── dbt/pl_analytics/
-│   ├── models/
-│   │   ├── staging/          # stg_matches_historical
-│   │   └── marts/            # fct_results, fct_standings, fct_team_form, fct_team_season_stats
-│   └── seeds/
-│       └── team_name_mapping.csv
-├── streamlit/
-│   └── app.py                # dashboard
-├── data/                     # DuckDB database (gitignored)
-├── logs/                     # cron job logs (gitignored)
-└── refresh.sh                # daily refresh script
+
+    premier-league-analytics/
+    ├── ingestion/
+    │   ├── fetch_historical.py   # 21 seasons of match data + odds
+    │   ├── fetch_fixtures.py     # upcoming fixtures
+    │   └── predict_match.py      # Poisson prediction model
+    ├── dbt/pl_analytics/
+    │   ├── models/
+    │   │   ├── staging/          # stg_matches_historical
+    │   │   └── marts/            # fct_results, fct_standings, fct_team_form, fct_team_season_stats
+    │   └── seeds/
+    │       └── team_name_mapping.csv
+    ├── streamlit/
+    │   └── app.py                # dashboard
+    ├── data/                     # DuckDB database (gitignored)
+    ├── logs/                     # cron job logs (gitignored)
+    └── refresh.sh                # daily refresh script
 
 ## Dashboard tabs
 - **Standings** — league table for any season (2005/06 to present)
