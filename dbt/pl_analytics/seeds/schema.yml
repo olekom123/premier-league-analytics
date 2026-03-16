@@ -1,0 +1,14 @@
+version: 2
+
+seeds:
+  - name: team_name_mapping
+    description: "Maps short historical team names (football-data.co.uk) to full standard names (football-data.org). Needs updating each season when teams are promoted/relegated."
+    columns:
+      - name: historical_name
+        tests:
+          - unique
+          - not_null
+      - name: standard_name
+        tests:
+          - unique
+          - not_null

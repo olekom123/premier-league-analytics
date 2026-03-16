@@ -13,7 +13,7 @@ with home_stats as (
         sum(case when outcome = 'home' then 1 else 0 end) as home_wins,
         sum(case when outcome = 'draw' then 1 else 0 end) as home_draws,
         sum(case when outcome = 'away' then 1 else 0 end) as home_losses
-    from stg_matches_historical
+    from {{ ref('stg_matches_historical') }}
     group by season, home_team
 ),
 
@@ -30,7 +30,7 @@ away_stats as (
         sum(case when outcome = 'away' then 1 else 0 end) as away_wins,
         sum(case when outcome = 'draw' then 1 else 0 end) as away_draws,
         sum(case when outcome = 'home' then 1 else 0 end) as away_losses
-    from stg_matches_historical
+    from {{ ref('stg_matches_historical') }}
     group by season, away_team
 )
 

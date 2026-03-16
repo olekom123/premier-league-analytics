@@ -40,9 +40,9 @@ select
         when m.fthg = m.ftag then 1
         else 0
     end as away_points
-from raw_matches_historical as m
-left join team_name_mapping as ht on m.hometeam = ht.historical_name
-left join team_name_mapping as atm on m.awayteam = atm.historical_name
+from {{ source('main', 'raw_matches_historical') }} as m
+left join {{ ref('team_name_mapping') }} as ht on m.hometeam = ht.historical_name
+left join {{ ref('team_name_mapping') }} as atm on m.awayteam = atm.historical_name
 where
     m.date is not null
     and m.hometeam is not null
