@@ -43,3 +43,19 @@ Runtime Error
 [0m21:14:15.636001 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'invocation', 'label': 'end', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x107d52160>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x119d3b100>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x119d3b130>]}
 [0m21:14:15.636133 [debug] [MainThread]: Flushing usage events
 [0m21:14:16.135526 [debug] [MainThread]: An error was encountered while trying to flush usage events
+[0m21:50:11.960629 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'invocation', 'label': 'start', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x107dc6220>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x11323caf0>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x11323c910>]}
+
+
+============================== 21:50:11.962916 | 361a73df-b2a8-451f-981e-44443334075d ==============================
+[0m21:50:11.962916 [info ] [MainThread]: Running with dbt=1.10.20
+[0m21:50:11.963164 [debug] [MainThread]: running dbt with arguments {'profiles_dir': '/Users/alexkomyshnyi/.dbt', 'partial_parse': 'True', 'introspect': 'True', 'invocation_command': 'dbt build', 'indirect_selection': 'eager', 'log_format': 'default', 'quiet': 'False', 'warn_error_options': 'WarnErrorOptionsV2(error=[], warn=[], silence=[])', 'use_colors': 'True', 'cache_selected_only': 'False', 'log_path': 'logs', 'use_experimental_parser': 'False', 'static_parser': 'True', 'empty': 'False', 'warn_error': 'None', 'write_json': 'True', 'fail_fast': 'False', 'target_path': 'None', 'send_anonymous_usage_stats': 'True', 'debug': 'False', 'no_print': 'None', 'printer_width': '80', 'log_cache_events': 'False', 'version_check': 'True'}
+[0m21:50:11.963460 [error] [MainThread]: Encountered an error:
+Runtime Error
+  No dbt_project.yml found at expected path /Users/alexkomyshnyi/Desktop/premier-league-analytics/dbt/dbt_project.yml
+  Verify that each entry within packages.yml (and their transitive dependencies) contains a file named dbt_project.yml
+  
+[0m21:50:11.964474 [debug] [MainThread]: Resource report: {"command_name": "build", "command_success": false, "command_wall_clock_time": 0.03758725, "process_in_blocks": "0", "process_kernel_time": 0.082883, "process_mem_max_rss": "97910784", "process_out_blocks": "0", "process_user_time": 0.543918}
+[0m21:50:11.964656 [debug] [MainThread]: Command `dbt build` failed at 21:50:11.964612 after 0.04 seconds
+[0m21:50:11.964788 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'invocation', 'label': 'end', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x107dc6220>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x113210310>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x113210cd0>]}
+[0m21:50:11.964920 [debug] [MainThread]: Flushing usage events
+[0m21:50:12.533306 [debug] [MainThread]: An error was encountered while trying to flush usage events
