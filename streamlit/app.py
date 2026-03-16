@@ -1,5 +1,6 @@
 import streamlit as st
 import duckdb
+from datetime import datetime
 
 DB_PATH = '/Users/alexkomyshnyi/Desktop/premier-league-analytics/data/pl_analytics.db'
 
@@ -9,16 +10,32 @@ def get_data(query):
     con.close()
     return df
 
-st.set_page_config(page_title="PL Analytics", layout="wide")
-st.title("Premier League 2024/25 Analytics")
+def get_seasons():
+    df = get_data("SELECT DISTINCT season FROM fct_standings ORDER BY season DESC")
+    return df['season'].tolist()
 
-tab1, tab2, tab3 = st.tabs(["Standings", "Form", "Results"])
+def get_current_season():
+    now = datetime.now()
+    year = now.year if now.month >= 8 else now.year - 1
+    return str(year)[2:] + str(year + 1)[2:]
+
+st.set_page_config(page_title="PL Analytics", layout="wide")
+st.title("Premier League Analytics")
+
+seasons = get_seasons()
+current_season = get_current_season()
+default_idx = seasons.index(current_season) if current_season in seasons else 0
+selected_season = st.sidebar.selectbox("Season", seasons, index=default_idx)
+
+tab1, tab2, tab3, tab4 = st.tabs(["Standings", "Form", "Results", "Predictions"])
 
 with tab1:
-    st.subheader("League Table")
-    standings = get_data("""
+    st.subheader(f"League Table — {selected_season}")
+    standings = get_data(f"""
         select
-            row_number() over (order by total_points desc, goal_difference desc, goals_for desc) as pos,
+            row_number() over (
+                order by total_points desc, goal_difference desc, goals_for desc
+            )                   as pos,
             team,
             games_played,
             wins,
@@ -27,14 +44,15 @@ with tab1:
             goals_for,
             goals_against,
             goal_difference,
-            total_points as points
+            total_points        as points
         from fct_standings
+        where season = '{selected_season}'
     """)
     st.dataframe(standings, hide_index=True, width='stretch')
 
 with tab2:
-    st.subheader("Team Form (Last 5 Games)")
-    form = get_data("""
+    st.subheader(f"Team Form (Last 5) — {selected_season}")
+    form = get_data(f"""
         select
             team,
             form,
@@ -43,13 +61,13 @@ with tab2:
             losses_last_5,
             points_last_5
         from fct_team_form
+        where season = '{selected_season}'
         order by points_last_5 desc
     """)
     st.dataframe(form, hide_index=True, width='stretch')
 
 with tab3:
-    st.subheader("Match Results")
-    matchday = st.slider("Matchday", 1, 38, 1)
+    st.subheader(f"Match Results — {selected_season}")
     results = get_data(f"""
         select
             match_date,
@@ -58,8 +76,25 @@ with tab3:
             away_score,
             away_team,
             total_goals
-        from stg_matches
-        where matchday = {matchday}
-        order by match_date
+        from stg_matches_historical
+        where season = '{selected_season}'
+        order by match_date desc
     """)
     st.dataframe(results, hide_index=True, width='stretch')
+
+with tab4:
+    st.subheader("Upcoming Fixtures & Predictions")
+    predictions = get_data("""
+        select
+            utc_date,
+            matchday,
+            home_team,
+            away_team,
+            round(prob_home_win * 100, 1)   as home_win_pct,
+            round(prob_draw * 100, 1)        as draw_pct,
+            round(prob_away_win * 100, 1)    as away_win_pct,
+            predicted_outcome
+        from raw_predictions
+        order by utc_date
+    """)
+    st.dataframe(predictions, hide_index=True, width='stretch')
