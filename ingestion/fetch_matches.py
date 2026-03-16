@@ -1,3 +1,13 @@
+"""
+fetch_matches.py
+
+Downloads current season (2024/25) Premier League match results
+from football-data.org API into DuckDB table `raw_matches`.
+
+Runs a full refresh every time (DELETE + reinsert).
+Requires FOOTBALL_DATA_API_KEY in .env file.
+Source: https://www.football-data.org
+"""
 import os                                                                                                                                                
 import requests 
 import duckdb                                                                                                                                            

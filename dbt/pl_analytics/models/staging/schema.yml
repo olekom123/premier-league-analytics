@@ -26,3 +26,24 @@ models:
       - name: matchday
         tests:
           - not_null
+  - name: stg_matches_historical
+    description: "Cleaned historical match data from football-data.co.uk (21 seasons)"
+    columns:
+      - name: match_date
+        tests:
+          - not_null
+      - name: home_team
+        tests:
+          - not_null
+      - name: away_team
+        tests:
+          - not_null
+      - name: outcome
+        tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: ['home', 'away', 'draw']
+      - name: season
+        tests:
+          - not_null
