@@ -50,31 +50,35 @@ A full end-to-end data engineering project analysing 21 seasons of Premier Leagu
 git clone https://github.com/olekom123/premier-league-analytics.git
 cd premier-league-analytics
 
-2. Install dependencies
+2. Configure git hooks
+./setup.sh
+This sets up pre-commit checks that run automatically before every commit (Python syntax + SQL int).
+                                                    
+3. Install dependencies
 
 pip3 install -r requirements.txt
 
-3. Get a free API key
+4. Get a free API key
 
 Sign up at football-data.org and create a .env file:
 FOOTBALL_DATA_API_KEY=your_key_here
 
-4. Run ingestion
+5. Run ingestion
 
 python3 ingestion/fetch_historical.py
 python3 ingestion/fetch_fixtures.py
 
-5. Run dbt
+6. Run dbt
 
 cd dbt/pl_analytics
 dbt seed
 dbt build
 
-6. Generate predictions
+7. Generate predictions
 
 python3 ingestion/predict_match.py
 
-7. Start dashboard
+8. Start dashboard
 
 streamlit run streamlit/app.py
 

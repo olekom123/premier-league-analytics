@@ -5,8 +5,6 @@ select
     strptime(m.date, '%d/%m/%Y')::date as match_date,
     m.ftr as result,
     m.htr as ht_result,
-    coalesce(ht.standard_name, m.hometeam) as home_team,
-    coalesce(atm.standard_name, m.awayteam) as away_team,
     (m.fthg)::integer as home_score,
     (m.ftag)::integer as away_score,
     (m.hthg)::integer as ht_home_score,
@@ -24,6 +22,8 @@ select
     (m.b365a)::double as odds_away,
     (m."B365>2.5")::double as odds_over_25,
     (m."B365<2.5")::double as odds_under_25,
+    coalesce(ht.standard_name, m.hometeam) as home_team,
+    coalesce(atm.standard_name, m.awayteam) as away_team,
     home_score + away_score as total_goals,
     case
         when m.ftr = 'H' then 'home'
@@ -41,8 +41,12 @@ select
         else 0
     end as away_points
 from {{ source('main', 'raw_matches_historical') }} as m
-left join {{ ref('team_name_mapping') }} as ht on m.hometeam = ht.historical_name
-left join {{ ref('team_name_mapping') }} as atm on m.awayteam = atm.historical_name
+left join
+    {{ ref('team_name_mapping') }} as ht
+    on m.hometeam = ht.historical_name
+left join
+    {{ ref('team_name_mapping') }} as atm
+    on m.awayteam = atm.historical_name
 where
     m.date is not null
     and m.hometeam is not null

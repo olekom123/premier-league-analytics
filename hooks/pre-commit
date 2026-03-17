@@ -1,0 +1,27 @@
+#!/bin/bash
+                                                                                                                                                        
+echo "Running pre-commit checks..."                                                                                                                      
+
+# 1. Python syntax check                                                                                                                                 
+echo "Checking Python syntax..."
+for file in ingestion/*.py; do
+    python3 -m py_compile "$file"
+    if [ $? -ne 0 ]; then
+        echo "FAIL: Syntax error in $file"                                                                                                               
+        exit 1
+    fi                                                                                                                                                   
+done            
+echo "  Python syntax OK"
+                                                                                                                                                        
+# 2. SQL lint                                                                                                                                            
+echo "Checking SQL with sqlfluff..."                                                                                                                     
+sqlfluff lint dbt/pl_analytics/models --dialect duckdb                                                                                          
+if [ $? -ne 0 ]; then                                                                                                                                    
+  echo "FAIL: SQL lint errors found. Run the following to auto-fix:"                                                                                       
+  echo "sqlfluff fix dbt/pl_analytics/models --dialect duckdb"    
+  echo "Then stage the fixed files and commit again."                                                                                                                     
+    exit 1                                                                                                                                               
+fi                                                                                                                                                       
+echo "  SQL lint OK"                                                                                                                                     
+                
+echo "All checks passed!"
