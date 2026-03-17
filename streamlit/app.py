@@ -70,7 +70,7 @@ with tab3:
     st.subheader(f"Match Results — {selected_season}")
     results = get_data(f"""
         select
-            match_date,
+            date(match_date) as match_date,
             home_team,
             home_score,
             away_score,
@@ -80,13 +80,14 @@ with tab3:
         where season = '{selected_season}'
         order by match_date desc
     """)
+    results['match_date'] = results['match_date'].astype(str)
     st.dataframe(results, hide_index=True, width='stretch')
 
 with tab4:
     st.subheader("Upcoming Fixtures & Predictions")
     predictions = get_data("""
         select
-            utc_date,
+            date(utc_date) as utc_date,
             matchday,
             home_team,
             away_team,
@@ -97,4 +98,5 @@ with tab4:
         from raw_predictions
         order by utc_date
     """)
+    predictions['utc_date'] = predictions['utc_date'].astype(str)
     st.dataframe(predictions, hide_index=True, width='stretch')
